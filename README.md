@@ -1,5 +1,5 @@
-# Inputs To Mail.
-Get Keyboard,Mouse,ScreenShot,Microphone Inputs and Send to your Mail.
+# Inputs To Custom Domain.
+Get Keyboard,Mouse,ScreenShot,Microphone Inputs and Send to your Domain.
 Purpose of the project is testing the security of information systems
 
 ## INSTALLATION
