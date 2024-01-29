@@ -11,10 +11,10 @@ try:
     import sounddevice as sd
     from pynput import keyboard
     from pynput.keyboard import Listener
-    from email import encoders
-    from email.mime.base import MIMEBase
-    from email.mime.multipart import MIMEMultipart
-    from email.mime.text import MIMEText
+    #from email import encoders
+    #from email.mime.base import MIMEBase
+    #from email.mime.multipart import MIMEMultipart
+    #from email.mime.text import MIMEText
     import glob
 except ModuleNotFoundError:
     from subprocess import call
